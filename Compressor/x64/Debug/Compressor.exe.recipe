@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\C compressor\x64\Debug\Compressor.exe</FullPath>
+      <FullPath>C:\Compressor\x64\Debug\Compressor.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

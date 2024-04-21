@@ -32,5 +32,11 @@
     <Text Include="input.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="output.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="output_decode.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
   </ItemGroup>
 </Project>
