@@ -132,6 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
+    <Text Include="output.txt" />
+    <Text Include="output_decode.txt" />
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
