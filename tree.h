@@ -16,8 +16,8 @@ typedef struct Heap {
 TreeNode* BuildHuffmanTree(int n, long long* f);
 
 typedef struct Code {
-	uint8_t bin_code;
-	uint8_t len;
+	uint32_t bin_code;
+	uint32_t len;
 }Code;
 
-void dfs_tree(TreeNode* tree, Code* codes, uint8_t bin_code, int len);
+void dfs_tree(TreeNode* tree, Code* codes, uint32_t bin_code, uint32_t len);

@@ -131,6 +131,8 @@
     <ClCompile Include="tree.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="alice_in_wonderland.txt" />
+    <Text Include="Bible.txt" />
     <Text Include="input.txt" />
     <Text Include="output.txt" />
     <Text Include="output_decode.txt" />
@@ -138,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="output.biba" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -127,75 +127,27 @@ TreeNode* BuildHuffmanTree(int n, long long* f)
 
 
 typedef struct Code {
-	uint8_t bin_code;
-	uint8_t len;
+	uint32_t bin_code;
+	uint32_t len;
 }Code;
 
-void dfs_tree(TreeNode* tree, Code* codes, uint8_t bin_code, int len)
+void dfs_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
 {
-	if (tree->left != NULL && tree->right == NULL)
-	{
-		bin_code = (bin_code << 1) | 0;
-		dfs_tree(tree->left, codes, bin_code, len + 1);
-	}
-	else if (tree->right != NULL && tree->left == NULL)
-	{
-		bin_code = (bin_code << 1) | 1;
-		dfs_tree(tree->right, codes, bin_code, len + 1);
-	}
-	else if (tree->left != NULL && tree->right != NULL)
-	{
-		bin_code = (bin_code << 1) | 0;
-		dfs_tree(tree->left, codes, bin_code, len + 1);
-		bin_code = (bin_code) | 1;
-		dfs_tree(tree->right, codes, bin_code, len + 1);
-	}
+	if (tree == NULL)
+		return;
 
-	if (tree->right == NULL && tree->left == NULL)
+	if (tree->left == NULL && tree->right == NULL)
 	{
-		if (len == 0)
-		{
-			printf("%d ", tree->sym);
-			codes[tree->sym].bin_code = 1;
-			codes[tree->sym].len = 1;
-			printf("1\n");
-		}
-		//for (int i = len - 1; i >= 0; i--)
-		else
-		{
-			codes[tree->sym].bin_code = bin_code;
-			codes[tree->sym].len = len;
-			printf("%d ", tree->sym);
-			for (int i = len - 1; i >= 0; i--)
-			{
-				if ((bin_code >> i)&1 == 1)
-				{
-					printf("1");
-				}
-				else
-					printf("0");
-			}
-			printf("\n");
-		}
+		codes[tree->sym].bin_code = bin_code;
+		codes[tree->sym].len = len;
+		printf("%d: ", tree->sym);
+		for (int i = len - 1; i >= 0; i--)
+			printf("%d", (bin_code >> i) & 1);
+		printf("\n");
+	}
+	else
+	{
+		dfs_tree(tree->left, codes, (bin_code << 1) | 0, len + 1);
+		dfs_tree(tree->right, codes, (bin_code << 1) | 1, len + 1);
 	}
 }
-//void dfs_tree(TreeNode* tree, Code* codes, uint8_t bin_code, int len)
-//{
-//	if (tree == NULL)
-//		return;
-//
-//	if (tree->left == NULL && tree->right == NULL)
-//	{
-//		codes[tree->sym].bin_code = bin_code;
-//		codes[tree->sym].len = len;
-//		printf("%d: ", tree->sym);
-//		for (int i = len - 1; i >= 0; i--)
-//			printf("%d", (bin_code >> i) & 1);
-//		printf("\n");
-//	}
-//	else
-//	{
-//		dfs_tree(tree->left, codes, bin_code << 1, len + 1);
-//		dfs_tree(tree->right, codes, (bin_code << 1) | 1, len + 1);
-//	}
-//}

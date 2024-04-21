@@ -38,5 +38,16 @@
     <Text Include="output_decode.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="alice_in_wonderland.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="Bible.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="output.biba">
+      <Filter>Исходные файлы</Filter>
+    </None>
   </ItemGroup>
 </Project>
