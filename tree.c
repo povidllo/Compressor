@@ -7,8 +7,8 @@
 //right = id * 2 + 2
 
 typedef struct TreeNode {
-	int count;
-	int sym;
+	long long count;
+	uint8_t sym;
 	struct TreeNode* left;
 	struct TreeNode* right;
 }TreeNode;
@@ -82,7 +82,7 @@ TreeNode* extract_min_heap(Heap* heap)
 }
 
 
-TreeNode* NewTreeFromSym(int sym, int f)
+TreeNode* NewTreeFromSym(int sym, long long f)
 {
 	TreeNode* res = (TreeNode*)malloc(sizeof(TreeNode));
 	res->count = f;
@@ -97,10 +97,11 @@ TreeNode* NewTreeFromTwoTrees(TreeNode* tree0, TreeNode* tree1)
 	res->count = tree0->count + tree1->count;
 	res->left = tree0;
 	res->right = tree1;
+	res->sym = 0;
 	return res;
 }
 
-TreeNode* BuildHuffmanTree(int n, int* f)
+TreeNode* BuildHuffmanTree(int n, long long* f)
 {
 	Heap heap = create_heap(256);
 	for (int i = 0; i < n; i++)
@@ -123,3 +124,78 @@ TreeNode* BuildHuffmanTree(int n, int* f)
 	}
 	return extract_min_heap(&heap);
 }
+
+
+typedef struct Code {
+	uint8_t bin_code;
+	uint8_t len;
+}Code;
+
+void dfs_tree(TreeNode* tree, Code* codes, uint8_t bin_code, int len)
+{
+	if (tree->left != NULL && tree->right == NULL)
+	{
+		bin_code = (bin_code << 1) | 0;
+		dfs_tree(tree->left, codes, bin_code, len + 1);
+	}
+	else if (tree->right != NULL && tree->left == NULL)
+	{
+		bin_code = (bin_code << 1) | 1;
+		dfs_tree(tree->right, codes, bin_code, len + 1);
+	}
+	else if (tree->left != NULL && tree->right != NULL)
+	{
+		bin_code = (bin_code << 1) | 0;
+		dfs_tree(tree->left, codes, bin_code, len + 1);
+		bin_code = (bin_code) | 1;
+		dfs_tree(tree->right, codes, bin_code, len + 1);
+	}
+
+	if (tree->right == NULL && tree->left == NULL)
+	{
+		if (len == 0)
+		{
+			printf("%d ", tree->sym);
+			codes[tree->sym].bin_code = 1;
+			codes[tree->sym].len = 1;
+			printf("1\n");
+		}
+		//for (int i = len - 1; i >= 0; i--)
+		else
+		{
+			codes[tree->sym].bin_code = bin_code;
+			codes[tree->sym].len = len;
+			printf("%d ", tree->sym);
+			for (int i = len - 1; i >= 0; i--)
+			{
+				if ((bin_code >> i)&1 == 1)
+				{
+					printf("1");
+				}
+				else
+					printf("0");
+			}
+			printf("\n");
+		}
+	}
+}
+//void dfs_tree(TreeNode* tree, Code* codes, uint8_t bin_code, int len)
+//{
+//	if (tree == NULL)
+//		return;
+//
+//	if (tree->left == NULL && tree->right == NULL)
+//	{
+//		codes[tree->sym].bin_code = bin_code;
+//		codes[tree->sym].len = len;
+//		printf("%d: ", tree->sym);
+//		for (int i = len - 1; i >= 0; i--)
+//			printf("%d", (bin_code >> i) & 1);
+//		printf("\n");
+//	}
+//	else
+//	{
+//		dfs_tree(tree->left, codes, bin_code << 1, len + 1);
+//		dfs_tree(tree->right, codes, (bin_code << 1) | 1, len + 1);
+//	}
+//}
