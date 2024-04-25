@@ -19,7 +19,7 @@ typedef struct Heap {
 	int cap;
 }Heap;
 
-Heap create_heap(int cap)//creating a heap
+Heap Create_heap(int cap)//creating a heap
 {
 	Heap heap;
 	heap.cap = cap;
@@ -28,7 +28,7 @@ Heap create_heap(int cap)//creating a heap
 	return heap;
 }
 
-void heapify(Heap* heap, int id)//from up to down
+void Heapify(Heap* heap, int id)//from up to down
 {
 	int left = id * 2 + 1;
 	int right = id * 2 + 2;
@@ -47,11 +47,11 @@ void heapify(Heap* heap, int id)//from up to down
 		TreeNode* temp = heap->arr[smallest];
 		heap->arr[smallest] = heap->arr[id];
 		heap->arr[id] = temp;
-		heapify(heap, smallest);
+		Heapify(heap, smallest);
 	}
 }
 
-void insert_heap(Heap* heap, TreeNode* val)//insert into heap
+void Insert_heap(Heap* heap, TreeNode* val)//insert into heap
 {
 	heap->arr[heap->size] = val;
 
@@ -71,13 +71,13 @@ void insert_heap(Heap* heap, TreeNode* val)//insert into heap
 	heap->size++;
 }
 
-TreeNode* extract_min_heap(Heap* heap)
+TreeNode* Extract_min_heap(Heap* heap)
 {
 	TreeNode* min = heap->arr[0];
 	heap->arr[0] = heap->arr[heap->size - 1];
 	heap->size--;
 
-	heapify(heap, 0);
+	Heapify(heap, 0);
 	return min;
 }
 
@@ -103,11 +103,11 @@ TreeNode* NewTreeFromTwoTrees(TreeNode* tree0, TreeNode* tree1)
 
 TreeNode* BuildHuffmanTree(int n, long long* f)
 {
-	Heap heap = create_heap(256);
+	Heap heap = Create_heap(256);
 	for (int i = 0; i < n; i++)
 	{
 		if(f[i] != 0)
-			insert_heap(&heap, NewTreeFromSym(i, f[i]));
+			Insert_heap(&heap, NewTreeFromSym(i, f[i]));
 	}
 	for (int i = 1; i < n; i++)
 	{
@@ -117,12 +117,12 @@ TreeNode* BuildHuffmanTree(int n, long long* f)
 		}
 		if (heap.size > 1)
 		{
-			TreeNode* tree0 = extract_min_heap(&heap);
-			TreeNode* tree1 = extract_min_heap(&heap);
-			insert_heap(&heap, NewTreeFromTwoTrees(tree0, tree1));
+			TreeNode* tree0 = Extract_min_heap(&heap);
+			TreeNode* tree1 = Extract_min_heap(&heap);
+			Insert_heap(&heap, NewTreeFromTwoTrees(tree0, tree1));
 		}
 	}
-	return extract_min_heap(&heap);
+	return Extract_min_heap(&heap);
 }
 
 
@@ -131,7 +131,7 @@ typedef struct Code {
 	uint32_t len;
 }Code;
 
-void dfs_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
+void DFS_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
 {
 	if (tree == NULL)
 		return;
@@ -140,14 +140,14 @@ void dfs_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
 	{
 		codes[tree->sym].bin_code = bin_code;
 		codes[tree->sym].len = len;
-		printf("%d: ", tree->sym);
-		for (int i = len - 1; i >= 0; i--)
-			printf("%d", (bin_code >> i) & 1);
-		printf("\n");
+		//printf("%d: ", tree->sym);
+		//for (int i = len - 1; i >= 0; i--)
+		//	printf("%d", (bin_code >> i) & 1);
+		//printf("\n");
 	}
 	else
 	{
-		dfs_tree(tree->left, codes, (bin_code << 1) | 0, len + 1);
-		dfs_tree(tree->right, codes, (bin_code << 1) | 1, len + 1);
+		DFS_tree(tree->left, codes, (bin_code << 1) | 0, len + 1);
+		DFS_tree(tree->right, codes, (bin_code << 1) | 1, len + 1);
 	}
 }
