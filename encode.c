@@ -24,8 +24,8 @@ void Encode_tree(TreeNode* node, FILE* file) {
 
 void Encode(FILE* input, FILE* output, Code* codes, TreeNode* tree, long long size)
 {
-	fwrite(&size, sizeof(long long), 1, output);
-	Encode_tree(tree, output);
+	// fwrite(&size, sizeof(long long), 1, output);
+	// Encode_tree(tree, output);
 	uint8_t sym;
 	uint8_t buffer = 0;
 	int count = 0;

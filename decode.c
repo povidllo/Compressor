@@ -54,6 +54,4 @@ void Decode(FILE* input, FILE* output, TreeNode* tree, long long size)
             bit++;
         }
     }
-    //сделать елси size != 0
-
 }
