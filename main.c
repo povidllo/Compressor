@@ -14,15 +14,16 @@ int main(int argc, char* argv[])
 {
     if (argc == 2 && (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "--h") == 0))
     {
-        printf("    Enter into terminal: main [file_path] [zip/unzip]\n");
-        printf("    [zip] - zip file (You can choose some files)\n");
-        printf("    [unzip] - unzip file (only if file has .biba extention\n");
+        printf("    Enter into terminal:\n");
+        printf("    ./app [file_path] -zip [archive_name] #if you want zip files (You can choose some files)\n");
+        printf("    ./app [file_path] -unzip              #unzip file (only if file has .biba extention)\n");
+        printf("    notise: you can't zip file with space in name, for example \"in pu.txt\"\n");
         return 0;
     }
 
-    if (argc >= 3 && strcmp(argv[argc - 1], "zip") == 0) {
+    if (argc >= 3 && strcmp(argv[argc - 2], "-zip") == 0) {
         /*Инициализация*/
-        int files_count = argc - 2; // количество файлов
+        int files_count = argc - 3; // количество файлов
         char** files_names = (char**)malloc(sizeof(char*) * files_count); // имена файлов
         long long *size = (long long*)malloc(sizeof(long long) * files_count); // размеры файлов
         if (files_names == NULL || size == NULL) {
@@ -31,7 +32,8 @@ int main(int argc, char* argv[])
         }
         long long symbols[257] = { 0 }; // количество символов
 
-        FILE* out = fopen("zip.biba", "wb"); // архивируемый файл
+        strcat(argv[argc - 1], ".biba");
+        FILE* out = fopen(argv[argc - 1], "wb"); // архивируемый файл
         if (out == NULL){
             printf("Something went wrong\n");
             return 1;
@@ -48,6 +50,7 @@ int main(int argc, char* argv[])
             size[f] = 0; 
 
             strcpy(files_names[f], basename(argv[f + 1]));
+            printf("%s ", files_names[f]);
 
             FILE* file = fopen(argv[f + 1], "rb");
             if (file == NULL) {
@@ -138,7 +141,7 @@ int main(int argc, char* argv[])
         // fclose(out);
         // free(codes);
     }
-    else if (argc == 3 && strcmp(argv[argc - 1], "unzip") == 0)
+    else if (argc == 3 && strcmp(argv[argc - 1], "-unzip") == 0)
     {
         FILE* input = fopen(argv[1], "rb");//декодируемый файл
         int files_count = 0;
