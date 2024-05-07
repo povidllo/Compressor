@@ -8,7 +8,7 @@
 #include <libgen.h> //для имени файла
 // #include "encode_decode.h"
 
-//gcc main.c encode.c decode.c tree.c -o app
+//gcc main.c encode.c decode.c tree.c -o compressor
 
 int main(int argc, char* argv[])
 {

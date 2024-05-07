@@ -1,3 +1,0 @@
-﻿  main.c
-C:\Compressor\main.c(52,21): warning C4018: <: несоответствие типов со знаком и без знака
-  Compressor.vcxproj -> C:\Compressor\x64\Debug\Compressor.exe
