@@ -140,10 +140,10 @@ void DFS_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
 	{
 		codes[tree->sym].bin_code = bin_code;
 		codes[tree->sym].len = len;
-		printf("%d: ", tree->sym);
-		for (int i = len - 1; i >= 0; i--)
-			printf("%d", (bin_code >> i) & 1);
-		printf("\n");
+		// printf("%d: ", tree->sym);
+		// for (int i = len - 1; i >= 0; i--)
+		// 	printf("%d", (bin_code >> i) & 1);
+		// printf("\n");
 	}
 	else
 	{
