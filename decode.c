@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "tree.h"
 
-TreeNode* Decode_tree(FILE* file)
+TreeNode* Decode_tree(FILE* file) //Decode Huffman Tree from "file"
 {
     int marker = fgetc(file);
-    if (marker == 0) return NULL; // ������ ����
+    if (marker == 0) return NULL; 
     TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
     if (node == NULL)
     {
@@ -13,18 +13,18 @@ TreeNode* Decode_tree(FILE* file)
         exit(0);
     }
     if (marker == 1) {
-        node->sym = fgetc(file); // ��������� ������ ��� ��������� ����
+        node->sym = fgetc(file);
         node->left = node->right = NULL;
     }
     else {
-        node->left = Decode_tree(file); // ���������� ������������� ����� ���������
-        node->right = Decode_tree(file); // ���������� ������������� ������ ���������
+        node->left = Decode_tree(file); 
+        node->right = Decode_tree(file);
     }
     return node;
 }
 
 
-void Decode(FILE* input, FILE* output, TreeNode* tree, long long size)
+void Decode(FILE* input, FILE* output, TreeNode* tree, long long size) //Decode one file from "input" to "output"
 {
 
     TreeNode* cur = tree;

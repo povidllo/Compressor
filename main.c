@@ -3,13 +3,18 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <unistd.h>
+#include <unistd.h> //for check existence 
 #include "tree.h"
-#include <libgen.h> //для имени файла
+#include <libgen.h> //for file name
+/*
+how to compile?
+    gcc main.c encode.c decode.c tree.c -o compressor
+or
+    gcc -shared -c -Wall -Werror -fpic main.c encode.c decode.c tree.c -o compressor_lib 
+second string for library
+*/
 
-//gcc main.c encode.c decode.c tree.c -o compressor
-
-int check_file(char* file_name) //проверяет есть ли такой файл уже или нет
+int check_file(char* file_name) //checks whether there is such a file already exist or not (using <unistd.h>)
 {
     if (access(file_name, F_OK) == 0)
     {
@@ -35,7 +40,7 @@ int check_file(char* file_name) //проверяет есть ли такой ф
 
 int main(int argc, char* argv[])
 {
-    if (argc == 2 && (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "--h") == 0))
+    if (argc == 2 && (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "--h") == 0)) //--help 
     {
         printf("    Enter into terminal:\n");
         printf("    ./app [file_path] -zip [archive_name] #if you want zip files (You can choose some files)\n");
@@ -44,29 +49,30 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    if (argc >= 3 && strcmp(argv[argc - 2], "-zip") == 0) {
-        /*Инициализация*/
-        int files_count = argc - 3; // количество файлов
-        char** files_names = (char**)malloc(sizeof(char*) * files_count); // имена файлов
-        long long *size = (long long*)malloc(sizeof(long long) * files_count); // размеры файлов
+    if (argc >= 3 && strcmp(argv[argc - 2], "-zip") == 0) //-zip
+    {
+        /*Initialisation*/
+        int files_count = argc - 3; // Files count
+        char** files_names = (char**)malloc(sizeof(char*) * files_count); // File names
+        long long *size = (long long*)malloc(sizeof(long long) * files_count); // File sizes
         if (files_names == NULL || size == NULL) {
             printf("    Something went wrong\n");
             return 1;
         }
-        long long symbols[257] = { 0 }; // количество символов
+        long long symbols[257] = { 0 }; // Symbol counts
 
         strcat(argv[argc - 1], ".biba");
         
-        if(check_file(argv[argc - 1])){return 1;} //проверяем есть ли такой файл уже
-        FILE* out = fopen(argv[argc - 1], "wb"); // открываем архивируемый файл
+        if(check_file(argv[argc - 1])){return 1;} //Execute "check_file()" function (.biba file)
+        FILE* out = fopen(argv[argc - 1], "wb"); //Open .biba file
         if (out == NULL){
             printf("    Something went wrong\n");
             return 1;
         }
         
-        fwrite(&files_count, sizeof(int), 1, out); // записать количество файлов
+        fwrite(&files_count, sizeof(int), 1, out); //Write files count
 
-        /*Считаем все байты и размеры*/
+        /*We count all bytes and sizes*/
         for(int f = 0; f < files_count; f++) {
             files_names[f] = (char*)malloc(sizeof(char) * 400);
             if (files_names[f] == NULL) { 
@@ -92,14 +98,14 @@ int main(int argc, char* argv[])
 
             // printf("%s %lld\n", files_names[f], size[f]);
             int len = strlen(files_names[f]);
-            fwrite(&len, sizeof(int), 1, out); // записать длину названия файла
-            fwrite(files_names[f], sizeof(char), len, out); // записать название файла
-            fwrite(&size[f], sizeof(long long), 1, out); // записать количество байт в файле
+            fwrite(&len, sizeof(int), 1, out); //Write the length of the file name
+            fwrite(files_names[f], sizeof(char), len, out); //Write the file name
+            fwrite(&size[f], sizeof(long long), 1, out); //Write bytes count
 
             fclose(file);
         }
 
-        /*Создаем дерево и коды*/
+        /*Create Huffman Tree and Codes*/
         TreeNode* tree = BuildHuffmanTree(257, symbols);
         Code* codes = (Code*)calloc(257, sizeof(Code));
         if (codes == NULL){
@@ -109,7 +115,7 @@ int main(int argc, char* argv[])
         DFS_tree(tree, codes, 0, 0);
         Encode_tree(tree, out);
 
-        /*Кодируем файлы*/
+        /*Encode files*/
         for(int f = 0; f < files_count; f++)
         {
             FILE* input = fopen(argv[f + 1], "rb");
@@ -133,24 +139,24 @@ int main(int argc, char* argv[])
         fclose(out);
         printf("    Your compression was successful\n");
     }
-    else if (argc == 3 && strcmp(argv[argc - 1], "-unzip") == 0)
+    else if (argc == 3 && strcmp(argv[argc - 1], "-unzip") == 0) //-unzip 
     {
         if(strstr(argv[1], ".biba") == NULL)
         {
             printf("    Your file must have [.biba] extention:)\n");
             return 1;
         }
-        FILE* input = fopen(argv[1], "rb");//декодируемый файл
+        FILE* input = fopen(argv[1], "rb");//Decode file
         int files_count = 0;
         fread(&files_count, sizeof(int), 1, input);
 
-        char** files_names = (char**)malloc(sizeof(char*) * files_count); // имена файлов
-        long long *size = (long long*)malloc(sizeof(long long) * files_count); // размеры файлов
+        char** files_names = (char**)malloc(sizeof(char*) * files_count); //File names
+        long long *size = (long long*)malloc(sizeof(long long) * files_count); // File sizes
         if (files_names == NULL || size == NULL) {
             printf("    Something went wrong\n");
             return 1;
         }
-        for(int f = 0; f < files_count; f++) // инициализация размеров и названий файлов
+        for(int f = 0; f < files_count; f++) //Initializing file sizes and names
         {
             files_names[f] = (char*)malloc(sizeof(char) * 400);
             if (files_names[f] == NULL) { 
@@ -167,9 +173,9 @@ int main(int argc, char* argv[])
         }
         // printf("-----------\n");
         TreeNode* new_tree = Decode_tree(input);
-        for(int f = 0; f < files_count; f++) // декодирование
+        for(int f = 0; f < files_count; f++) // Decoding
         {
-            if(check_file(files_names[f])){continue;;} //проверяем есть ли такой файл уже
+            if(check_file(files_names[f])){continue;;} //execute "check_file()" function
             FILE* output = fopen(files_names[f], "wb");
             Decode(input, output, new_tree, size[f]);
             // printf("5\n");

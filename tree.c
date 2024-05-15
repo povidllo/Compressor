@@ -19,7 +19,7 @@ typedef struct Heap {
 	int cap;
 }Heap;
 
-Heap Create_heap(int cap)//creating a heap
+Heap Create_heap(int cap)//Create a heap
 {
 	Heap heap;
 	heap.cap = cap;
@@ -28,7 +28,7 @@ Heap Create_heap(int cap)//creating a heap
 	return heap;
 }
 
-void Heapify(Heap* heap, int id)//from up to down
+void Heapify(Heap* heap, int id)//Heapify up to bottom
 {
 	int left = id * 2 + 1;
 	int right = id * 2 + 2;
@@ -51,7 +51,7 @@ void Heapify(Heap* heap, int id)//from up to down
 	}
 }
 
-void Insert_heap(Heap* heap, TreeNode* val)//insert into heap
+void Insert_heap(Heap* heap, TreeNode* val)//Instert in heap
 {
 	heap->arr[heap->size] = val;
 
@@ -71,7 +71,7 @@ void Insert_heap(Heap* heap, TreeNode* val)//insert into heap
 	heap->size++;
 }
 
-TreeNode* Extract_min_heap(Heap* heap)
+TreeNode* Extract_min_heap(Heap* heap)//Extract min from heap
 {
 	TreeNode* min = heap->arr[0];
 	heap->arr[0] = heap->arr[heap->size - 1];
@@ -82,16 +82,16 @@ TreeNode* Extract_min_heap(Heap* heap)
 }
 
 
-TreeNode* NewTreeFromSym(int sym, long long f)
+TreeNode* NewTreeFromSym(int sym, long long size)//Create a new tree with one element
 {
 	TreeNode* res = (TreeNode*)malloc(sizeof(TreeNode));
-	res->count = f;
+	res->count = size;
 	res->sym = sym;
 	res->left = res->right = NULL;
 	return res;
 }
 
-TreeNode* NewTreeFromTwoTrees(TreeNode* tree0, TreeNode* tree1)
+TreeNode* NewTreeFromTwoTrees(TreeNode* tree0, TreeNode* tree1)//Create a new tree from two trees
 {
 	TreeNode* res = (TreeNode*)malloc(sizeof(TreeNode));
 	res->count = tree0->count + tree1->count;
@@ -101,20 +101,20 @@ TreeNode* NewTreeFromTwoTrees(TreeNode* tree0, TreeNode* tree1)
 	return res;
 }
 
-TreeNode* BuildHuffmanTree(int n, long long* f)
+TreeNode* BuildHuffmanTree(int n, long long* symbols)//Build a Huffman Tree
 {
 	Heap heap = Create_heap(256);
 	for (int i = 0; i < n; i++)
 	{
-		if(f[i] != 0)
-			Insert_heap(&heap, NewTreeFromSym(i, f[i]));
+		if(symbols[i] != 0)
+			Insert_heap(&heap, NewTreeFromSym(i, symbols[i]));
 	}
 	for (int i = 1; i < n; i++)
 	{
-		for (int j = 0; j < heap.size; j++)
-		{
-			TreeNode* a = heap.arr[j];
-		}
+		// for (int j = 0; j < heap.size; j++)
+		// {
+		// 	TreeNode* a = heap.arr[j];
+		// }
 		if (heap.size > 1)
 		{
 			TreeNode* tree0 = Extract_min_heap(&heap);
@@ -131,7 +131,7 @@ typedef struct Code {
 	uint32_t len;
 }Code;
 
-void DFS_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len)
+void DFS_tree(TreeNode* tree, Code* codes, uint32_t bin_code, int len) //Give binary code for each symbol using Huffman Tree
 {
 	if (tree == NULL)
 		return;
